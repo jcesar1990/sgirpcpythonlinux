@@ -1,0 +1,153 @@
+Configurar git
+se abre git bash en caso de estar en windos y en caso de linux o mac solo abrir terminal
+git --version     nos dira si se instalo correctamente y la version que tenemos
+
+git config --global user.name "nombre"   se coloca el nombre de la cuenta, debe ir entre comillas
+git config --global user.email correo    se agrega el correo asociado a la cuenta
+git config --global core.editor "editor --wait"  dentro de las comillas se colocara el editor a usar, para visual code es el siguiente
+git config --global core.editor "code --wait" 
+git config --global -e     si se configuro bien este comando abrira el editor y mostrara los datos del respositorio
+si cerramos el editor retomaremos el control de la terminal
+al hacer saltos de linea, git asume un salto de lina con un CR, para trabajar en windows debemos ejecutar la siguiente linea
+git config --global core.autocrlf true     true si es windows, para mac y lin es false
+
+para indagar mas en la configuracion
+git config --h
+
+una vez en la carpeta en el que vayamos a trabajar
+git init
+permitira generar el directorio en git
+
+para pasar archivos al stage se realiza con el siguiente comando
+git add archivo     solo pasara el archivo seleccionado
+git add .*extension
+git add .    este sube todos los archivos y hay que tener cuidado al seleccionar esta manera de subir los archivos
+
+para ver el estado del respositorio en el stage debemos ejecutar la siguiente linea en terminal 
+git status
+como consejo cada que realicemos un cambio dememos ejecutar la linea anterios varias veces
+
+para pasar al commit que es el estado donde estamos seleccionando los archivos dentro del stage para subirlos al respositorio
+git commit -m "mensaje"  dentro de las comilla debemos colocar un mesaje para saber a que se debio la actualización del archivo
+
+en este punto ya estamo eligiendo que archivos van a subir al respositorio, se recomienda hacer un git status para verificar el estado de los 
+archivos antes de subirlos, debera mostrar el mensaje que el arbol de trabajo esta limpio, 
+en caso de haber modificado alguno, se mostrara el archivo en rojo mencionando sobre su modificacion por lo que se hará lo siguiente
+git commit 
+
+este comando abrira el editor de texto que se haya confugurado para revisar el archivo, se guarda, cerramos, se vera la modificacion
+y podemos realizar un nuevo add para postereormente actualizar nuestro commit
+
+en caso de eliminar un archivo, debemos agrear ese cambio a la estapa de stage
+
+se realiza un git add con el nombre del archivo y nuevamente un commit mensioando en el mensaje del commit la eliminacion del archivo
+
+git tambien tambien incorpora una forma para realizar este mismo paso de eliminar el archivo usando el siguiente comando 
+git rm archivo
+paso siguiente es el commit como se mensiono anteriormente
+
+para sacar una rchivo de la estapa de stage debemos usar la siguiente instrucción
+git restore --staged archivo
+al realizarel status veremos un mensaje que lo saco de esta estapa
+
+para reestablecer cambios o recuperar un archivo que hayamos sacado de nuestra etapa de stage desde antes de hacer coomit
+git reestore archivo   
+
+para cambiar un nombre de un archivo en el stage
+mv nombre anterior  nombre nuevo
+
+al hacer status nos mostrara el cambio del nombre 
+despues se hace un add
+git add archivoanterior archivonuevo
+git status
+git commit -m "renombrando archivo"   recordad que el mensaje puede ser cualquiera
+
+de igual manera que en la forma de eliminar un archivo, git incluye un comando para este paso que de igual manera
+envia el cambio directo al stage
+git mv archivo1 archivo2
+git commit -m "mensaje"
+
+para ignorar archivos para que no sean inclidos en el repositorio como pueden ser variables de entorno
+realizamos un archivo ".env" que es un nombre estandar para variables de entorno
+podemos poner un nombre de usuario y una contraseña
+creamos un nuevo archivo que se llame .gitignore
+aqui especificamos los archivos o rutas que no queramos que lleguen a subirse al repositorio
+
+ahora debemos añadir con un add nuestro archivo gitignore y darle commit
+git add .gitignore
+git commit "agregando archivo gitignore"
+y evaluar con un status
+git status
+ya no deberan verse los archivos ignorados (tampoco el archivo gitignore)
+
+Tip al momento de ver el estado en git
+git status -s
+el -s nos dara un mensaje resumido del estatus, -M signidica modificado, el ?? signidica que no se a agregando
+cuando se agregue marcara una A y cuando todo este en verde estara listo para comprometer con un commit
+
+si modificamos un archivo podemos usar el comando
+git diff 
+nos mostrara mostrara todo el texto de los cambios que estamos dispuestos a agregar
+para salir de esa ventana emergente que muestra los cambios presionamos "q"
+procedemos agregar los cambios con un add
+si ejecutamos diff nuevamente no mostrara nada pero si usamos 
+git diff --status 
+nos mostrara los cambios en la etapa de staged
+
+con el comando siguiente podremos ver el historial del repositorio y podremos ver los datos de quien modifico, que se modifico y la historial
+git log
+con
+git log --oneline
+mostrara el historial con un idendificador unico del commit
+
+para poder trabajar manteniendo el proyecto seguro, git trabaja en ramas para no dañar la principal (main)
+verificamos en que rama estamos trabajando
+git branch
+con el siguiente comando creamos una rama 
+git checkout -b "nombre de la rama"
+
+en la rama nueva podremos realizar todas las moficicaciones necesarias
+para salir de la pantalla presionamos la tecla "u"
+
+si queremos ver el contenido de un archivo podemos usar el comando 
+cat "nombre del archivo"
+
+para poder cambiar de rama es con el siguiente comando
+git checkout nombre de la rama
+
+para traer los cambios de una rama cualquiera a la rama main es con el siguiente comando, (para esto tenemos que estar en la rama main)
+git merge 
+
+para el siguiente paso usaremos la plataforma de GITHUB para poder ver nuestro repositorio y darle seguimiento
+entramos a la pagina 
+
+https://github.com
+
+nos logeamos, estando dentro nos crearemos un repositorio en new
+colocamos el nombre, el tipo de repositorio, en este caso publico y sin chequear el resto creamos el respositorio
+nos va a arrojar una ventana con algunos comandos, copearemos el de git remote
+git remote add origin link
+esta linea indicara si tenemos un servidor remoto al cual subir nuestros cambios
+con git push podremos subir los cambios respecto a la rama en donde estemos trabajando, con -u le indicamos la rama y con origin indicamos donde queremos que sea creada
+git push - origin main
+nos pedira que coloquemos un usuario y una key, esa key la obtenemos en nuestra cuenta de github, esntramos nuestra sesion de gitgub 
+settings y casi al final damos en developer settings, personal access tokes y generate access token, elegimos un nombre para el token y la caducidad
+selecionamos el alcance del token y elegimos todas las opciones del repositorio, damos generar y copeamos el token
+copeamos esa clave y damos enter y veremos como el cogigo se subio a github
+cada que editemos algun archivo, para subirlo sera con 
+git add
+git commint -m
+git push
+
+para trabajar con una evitando hacer un merge en master (o main) entramos con
+git checkout -b "nombre de la rama"
+git puch -u nombre de la rama
+esto creara la rama
+
+
+
+
+server
+
+videotutorial del uso de git
+https://www.youtube.com/watch?v=VdGzPZ31ts8&t=2269s
